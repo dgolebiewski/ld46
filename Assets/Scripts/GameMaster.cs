@@ -51,13 +51,26 @@ public class GameMaster : MonoBehaviour
             campfireTime = campfireMaxTime;
     }
 
-    public void ModifyResources(CollectableResources difference)
+    public bool ModifyResources(CollectableResources difference)
     {
         playerResources.wood += difference.wood;
+        if(playerResources.wood < 0)
+        {
+            playerResources.wood -= difference.wood;
+            return false;
+        }
+
         playerResources.stone += difference.stone;
+        if(playerResources.stone < 0)
+        {
+            playerResources.stone -= difference.stone;
+            return false;
+        }
 
         if(onResourcesUpdate != null)
             onResourcesUpdate();
+
+        return true;
     }
 
     public void ResetGameMaster()
