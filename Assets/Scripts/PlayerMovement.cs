@@ -8,6 +8,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float speed = 8f;
     [SerializeField]
+    private float sprintSpeed = 12f;
+    [SerializeField]
+    private float maxStamina = 14f;
+    [SerializeField]
+    private float staminaRegen = 0.6f;
+    [SerializeField]
+    private float sprintCooldown = 1.5f;
+    [SerializeField]
     private float jumpSpeed = 8f;
     [SerializeField]
     private float gravity = 6.67f;
@@ -19,19 +27,25 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private Vector3 moveDirection;
 
-    bool jump = false;
+    private float stamina = 0f;
+    private float sprintCooldownLeft = 0;
+    bool sprint = false;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
 
-        
+        stamina = maxStamina;
     }
 
     void Update()
     {
+        sprint = Input.GetButton("Sprint") && stamina > 0 && sprintCooldownLeft <= 0;
+
         if(!lockMovement)
         {
+            float currentSpeed = sprint ? sprintSpeed : speed;
+
             if (characterController.isGrounded)
             {
                 Vector3 forward = transform.forward * Input.GetAxis("Vertical");
@@ -39,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
                 moveDirection = forward + sideways;
                 moveDirection.y = 0;
-                moveDirection *= speed;
+                moveDirection *= currentSpeed;
 
                 if (Input.GetButton("Jump"))
                 {
@@ -58,5 +72,27 @@ public class PlayerMovement : MonoBehaviour
 
             cameraTransform.localRotation = Quaternion.Euler(cameraTransform.eulerAngles.x - Input.GetAxisRaw("Mouse Y") * rotationSensitivity * Time.deltaTime, 0, 0);
         }
+
+        if(!sprint)
+        {
+            stamina += staminaRegen * Time.deltaTime;
+            sprintCooldownLeft -= Time.deltaTime;
+        }
+        else
+        {
+            stamina -= Time.deltaTime;
+            if(stamina <= 0)
+                sprintCooldownLeft = sprintCooldown;
+        }
+    }
+
+    public float GetStamina()
+    {
+        return stamina;
+    }
+
+    public float GetMaxStamina()
+    {
+        return maxStamina;
     }
 }
