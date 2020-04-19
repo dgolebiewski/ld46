@@ -77,6 +77,9 @@ public class PlayerMovement : MonoBehaviour
         {
             stamina += staminaRegen * Time.deltaTime;
             sprintCooldownLeft -= Time.deltaTime;
+
+            if(stamina > maxStamina)
+                stamina = maxStamina;
         }
         else
         {
@@ -84,6 +87,11 @@ public class PlayerMovement : MonoBehaviour
             if(stamina <= 0)
                 sprintCooldownLeft = sprintCooldown;
         }
+    }
+
+    public bool IsSprinting()
+    {
+        return sprint;
     }
 
     public float GetStamina()

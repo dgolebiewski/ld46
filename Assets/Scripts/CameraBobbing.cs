@@ -12,28 +12,34 @@ public class CameraBobbing : MonoBehaviour
     private float midpoint = 2.0f;
 
     private float timer = 0f;
+    private PlayerMovement playerMovement;
+
+    void Start()
+    {
+        playerMovement = GetComponentInParent<PlayerMovement>();
+    }
     
-    void Update () 
+    void Update() 
     {
         float waveslice = 0.0f;
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        float currentBobbingSpeed = Input.GetButton("Sprint") ? bobbingSpeedSprint : bobbingSpeed;
+        float currentBobbingSpeed = playerMovement.IsSprinting() ? bobbingSpeedSprint : bobbingSpeed;
     
         Vector3 newPos = transform.localPosition; 
     
-        if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
+        if(Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
             timer = 0.0f;
         else 
         {
             waveslice = Mathf.Sin(timer);
-            timer = timer + currentBobbingSpeed;
+            timer = timer + currentBobbingSpeed * Time.deltaTime;
             if (timer > Mathf.PI * 2) 
                 timer = timer - (Mathf.PI * 2);
         }
         
-        if (waveslice != 0) 
+        if(waveslice != 0) 
         {
             float translateChange = waveslice * bobbingAmount;
             float totalAxes = Mathf.Abs(horizontal) + Mathf.Abs(vertical);

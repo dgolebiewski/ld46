@@ -12,8 +12,12 @@ public class GameMaster : MonoBehaviour
     private CollectableResources playerResources;
     [SerializeField]
     private CollectableResources refuelingCost;
+    [SerializeField]
+    private InGameMenus gameMenus;
 
     private float campfireTime;
+
+    private bool paused = false;
 
     public delegate void GameMasterEvent();
     public GameMasterEvent onResourcesUpdate;
@@ -40,6 +44,17 @@ public class GameMaster : MonoBehaviour
     void Update()
     {
         campfireTime -= Time.deltaTime;
+
+        if(Input.GetButtonDown("Cancel"))
+            TogglePause();
+    }
+
+    public void TogglePause()
+    {
+        paused = !paused;
+        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+        Time.timeScale = paused ? 0 : 1;
+        gameMenus.Toggle(paused);
     }
 
     public void AddFuel()
@@ -79,6 +94,11 @@ public class GameMaster : MonoBehaviour
 
         if(onResourcesUpdate != null)
             onResourcesUpdate();
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     public CollectableResources GetCollectableResources()
