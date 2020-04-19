@@ -8,7 +8,7 @@ public class CameraBobbing : MonoBehaviour
     private float bobbingSpeedSprint = 0.2f;
     [SerializeField]
     private float bobbingAmount = 0.2f;
-    [SerializeField]
+
     private float midpoint = 2.0f;
 
     private float timer = 0f;
@@ -17,6 +17,7 @@ public class CameraBobbing : MonoBehaviour
     void Start()
     {
         playerMovement = GetComponentInParent<PlayerMovement>();
+        midpoint = transform.position.y;
     }
     
     void Update() 

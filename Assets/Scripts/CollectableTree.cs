@@ -30,6 +30,7 @@ public class CollectableTree : MonoBehaviour
         Vector3 dir = player.position - transform.position;
         dir.Normalize();
 
+        rb.isKinematic = false;
         rb.AddForceAtPosition(dir * force, forcePosition);
         StartCoroutine(FallThroughGround());
     }

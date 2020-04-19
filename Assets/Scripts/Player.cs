@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool lockInteractions = false;
+
     [SerializeField]
     private Transform cameraTransform;
     [SerializeField]
@@ -61,7 +63,7 @@ public class Player : MonoBehaviour
     private IEnumerator CheckInteractions()
     {
         RaycastHit hit;
-        if(Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Interactable.INTERACTION_MAX_DISTANCE, interactablesMask, QueryTriggerInteraction.Ignore))
+        if(!lockInteractions && Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Interactable.INTERACTION_MAX_DISTANCE, interactablesMask, QueryTriggerInteraction.Ignore))
         {
             Interactable i = hit.transform.gameObject.GetComponent<Interactable>();
             if(currentInteraction != null && currentInteraction != i && currentInteraction.InProgress())
@@ -100,5 +102,10 @@ public class Player : MonoBehaviour
     public Interactable GetCurrentInteractable()
     {
         return currentInteraction;
+    }
+
+    public void LockInteractions(bool lockInter)
+    {
+        lockInteractions = lockInter;
     }
 }

@@ -2,7 +2,7 @@
 
 public class Interactable : MonoBehaviour
 {
-    public const float INTERACTION_MAX_DISTANCE = 2f;
+    public const float INTERACTION_MAX_DISTANCE = 3f;
 
     [SerializeField]
     private bool oneTimeInteraction = false;
