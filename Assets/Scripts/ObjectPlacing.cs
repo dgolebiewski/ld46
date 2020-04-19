@@ -7,6 +7,8 @@ public class ObjectPlacing : MonoBehaviour
     [SerializeField]
     private Vector3 extraFreeSpace = new Vector3(2, 0, 2);
     [SerializeField]
+    private Vector3 placingOffset = new Vector3(0, 0.75f, 0);
+    [SerializeField]
     private LayerMask groundLayer;
     [SerializeField]
     private LayerMask collisionLayerMask;
@@ -45,12 +47,14 @@ public class ObjectPlacing : MonoBehaviour
         }
 
         bool canPlace = true;
+        Vector3 objectPosition = offset + placingOffset;
         Vector3 objectRotation = new Vector3(0, transform.eulerAngles.y, 0);
 
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.forward, out hit, maxPlaceDistance, groundLayer, QueryTriggerInteraction.Ignore))
         {
-            Collider[] colliders = Physics.OverlapBox(hit.point + offset, objectCollider.size / 2 + extraFreeSpace, Quaternion.Euler(objectRotation), collisionLayerMask, QueryTriggerInteraction.Ignore);
+            objectPosition += hit.point;
+            Collider[] colliders = Physics.OverlapBox(hit.point + offset + placingOffset, objectCollider.size / 2 + extraFreeSpace, Quaternion.Euler(objectRotation), collisionLayerMask, QueryTriggerInteraction.Ignore);
             if(colliders.Length > 0)
             {
                 for(int i = 0; i < colliders.Length; i++)
@@ -67,7 +71,7 @@ public class ObjectPlacing : MonoBehaviour
             canPlace = false;
 
         objectInstance.SetActive(canPlace);
-        objectInstance.transform.position = hit.point + offset;
+        objectInstance.transform.position = objectPosition;
         objectInstance.transform.rotation = Quaternion.Euler(objectRotation);
 
         if(canPlace && Input.GetButtonDown(placeButton))

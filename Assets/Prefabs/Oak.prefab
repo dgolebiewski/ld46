@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1602014284283632486}
   - component: {fileID: 9016773189587131444}
-  m_Layer: 0
+  - component: {fileID: 4218316054830529914}
+  - component: {fileID: -4459626830752696769}
+  - component: {fileID: 298514428682146629}
+  m_Layer: 8
   m_Name: Oak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,13 +42,65 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482195034440277276}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e046e23a1812c554fae14dade411abed, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.43577194
   m_Height: 6.6105156
   m_Direction: 1
   m_Center: {x: 0.0001335144, y: 2.0194454, z: 0.0364151}
+--- !u!114 &4218316054830529914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482195034440277276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 405d8c08e06f37e45ae2254013a3556b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTimeInteraction: 1
+  interationButton: Interact
+  interactionColor: {r: 0, g: 1, b: 1, a: 1}
+  interactionTime: 2
+  interactionLabel: Chop
+  resources:
+    wood: 5
+    stone: 0
+--- !u!114 &-4459626830752696769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482195034440277276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b00d9ae0280324c9eac345a14e4f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forcePosition: {x: 0, y: 4, z: 0}
+  force: 5
+  fallThroughTimer: 4
+  destructionTimer: 5
+--- !u!54 &298514428682146629
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482195034440277276}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.8
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &8918988069999258905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,16 +177,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: bd2c69b4f0f131548a8eac6a64cd3e83, type: 2}
+      objectReference: {fileID: 2100000, guid: 429d990de3319b147ba4783e5c8e0f9d, type: 2}
     - target: {fileID: -1504981713932161579, guid: 30bdf111d8d0b4d41b5062da58e76b7e,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: e0422674ef0542d4f913d0d9a9857d7d, type: 2}
+      objectReference: {fileID: 2100000, guid: 917db30fe1acb074ebad0dfb4ccbe54a, type: 2}
     - target: {fileID: -927199367670048503, guid: 30bdf111d8d0b4d41b5062da58e76b7e,
         type: 3}
       propertyPath: m_Name
       value: tree4
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 30bdf111d8d0b4d41b5062da58e76b7e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30bdf111d8d0b4d41b5062da58e76b7e, type: 3}
