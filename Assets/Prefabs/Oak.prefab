@@ -199,7 +199,7 @@ MonoBehaviour:
   interactionSound: {fileID: 6511890491280033209}
   interactionCompleteSound: {fileID: 0}
   resources:
-    wood: 5
+    wood: 6
     stone: 0
 --- !u!114 &-4459626830752696769
 MonoBehaviour:
