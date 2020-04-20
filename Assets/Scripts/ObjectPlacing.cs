@@ -17,7 +17,9 @@ public class ObjectPlacing : MonoBehaviour
 
     private bool holdingObject = false;
     private GameObject objectInstance;
+    private MeshRenderer[] objectRenderers;
     private BoxCollider objectCollider;
+    private CollisionTracker objectCollisionTracker;
     private Vector3 offset;
 
     public delegate void ObjectPlacingEvent();
@@ -54,12 +56,15 @@ public class ObjectPlacing : MonoBehaviour
         if(Physics.Raycast(transform.position, transform.forward, out hit, maxPlaceDistance, groundLayer, QueryTriggerInteraction.Ignore))
         {
             objectPosition += hit.point;
-            Collider[] colliders = Physics.OverlapBox(hit.point + offset + placingOffset, objectCollider.size / 2 + extraFreeSpace, Quaternion.Euler(objectRotation), collisionLayerMask, QueryTriggerInteraction.Ignore);
-            if(colliders.Length > 0)
+            objectInstance.transform.position = objectPosition;
+            objectInstance.transform.rotation = Quaternion.Euler(objectRotation);
+
+            if(objectCollisionTracker.IsColliding())
             {
-                for(int i = 0; i < colliders.Length; i++)
+                GameObject[] collidingObjects = objectCollisionTracker.GetCollisions();
+                foreach(GameObject o in collidingObjects)
                 {
-                    if(colliders[i].gameObject != objectInstance)
+                    if(o.tag != "Ground")
                     {
                         canPlace = false;
                         break;
@@ -70,14 +75,15 @@ public class ObjectPlacing : MonoBehaviour
         else
             canPlace = false;
 
-        objectInstance.SetActive(canPlace);
-        objectInstance.transform.position = objectPosition;
-        objectInstance.transform.rotation = Quaternion.Euler(objectRotation);
+        foreach(MeshRenderer mr in objectRenderers)
+            mr.enabled = canPlace;
 
         if(canPlace && Input.GetButtonDown(placeButton))
         {
             if(onObjectPlaced != null)
                 onObjectPlaced(objectInstance);
+
+            objectCollider.isTrigger = false;
 
             holdingObject = false;
             objectInstance = null;
@@ -85,12 +91,17 @@ public class ObjectPlacing : MonoBehaviour
         }
     }
 
-    public void HoldObject(GameObject gameObject)
+    public void HoldObject(GameObject gameObject, Vector3 objectOffset)
     {
         holdingObject = true;
         objectInstance = Instantiate(gameObject);
-        objectInstance.SetActive(false);
         objectCollider = objectInstance.GetComponent<BoxCollider>();
-        offset = new Vector3(0, objectCollider.size.y / 2, 0);
+        objectCollisionTracker = objectInstance.GetComponent<CollisionTracker>();
+        objectRenderers = objectInstance.GetComponentsInChildren<MeshRenderer>();
+        foreach(MeshRenderer mr in objectRenderers)
+            mr.enabled = false;
+        offset = objectOffset;
+
+        objectCollider.isTrigger = true;
     }
 }

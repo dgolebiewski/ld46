@@ -18,7 +18,6 @@ public class ObjectCulling : MonoBehaviour
         targetCamera = Camera.main.transform;
         if(objects == null || objects.Length == 0)
         {
-            Debug.Log("Searching");
             Transform[] children = transform.Cast<Transform>().ToArray();
             objects = new GameObject[children.Length];
             for(int i = 0; i < children.Length; i++)

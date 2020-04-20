@@ -66,11 +66,11 @@ public class PlayerMovement : MonoBehaviour
             characterController.Move(moveDirection * Time.deltaTime);
         }
 
-        if(!lockCamera)
+        if(!lockCamera && Time.timeScale > 0)
         {
-            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + Input.GetAxisRaw("Mouse X") * rotationSensitivity * Time.deltaTime, 0);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + Input.GetAxisRaw("Mouse X") * rotationSensitivity, 0);
 
-            cameraTransform.localRotation = Quaternion.Euler(cameraTransform.eulerAngles.x - Input.GetAxisRaw("Mouse Y") * rotationSensitivity * Time.deltaTime, 0, 0);
+            cameraTransform.localRotation = Quaternion.Euler(cameraTransform.eulerAngles.x - Input.GetAxisRaw("Mouse Y") * rotationSensitivity, 0, 0);
         }
 
         if(!sprint)

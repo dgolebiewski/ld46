@@ -50,6 +50,8 @@ public class InfoPanel : MonoBehaviour
         animator.SetBool("show", true);
         if(!indefinite)
             hideTimer = infoPanelTime;
+        else
+            hideTimer = 0;
     }
 
     public void HideInfo()

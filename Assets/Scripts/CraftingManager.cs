@@ -8,6 +8,7 @@ public class CraftingManager : MonoBehaviour
     {
         public GameObject prefab;
         public CollectableResources cost;
+        public Vector3 placingOffset;
     }
 
     [SerializeField]
@@ -44,10 +45,12 @@ public class CraftingManager : MonoBehaviour
             return;
         }
 
+        infoPanel.DisplayInfo("Press LMB to place.", true);
+
         gameMaster.TogglePause(false);
         player.lockInteractions = true;
 
-        objectPlacing.HoldObject(craftableObjects[index].prefab);
+        objectPlacing.HoldObject(craftableObjects[index].prefab, craftableObjects[index].placingOffset);
         currentObject = craftableObjects[index];
     }
 
@@ -69,6 +72,7 @@ public class CraftingManager : MonoBehaviour
 
     private void UnlockInteractions()
     {
+        infoPanel.HideInfo();
         player.lockInteractions = false;
     }
 }
