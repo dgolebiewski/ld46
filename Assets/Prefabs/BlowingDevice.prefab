@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 890356193133368867}
   - component: {fileID: 5891841734529052240}
   - component: {fileID: -1187508565447260857}
-  - component: {fileID: 1399333561418388391}
   - component: {fileID: 3565764640812754072}
   m_Layer: 8
   m_Name: BlowingDevice
@@ -80,26 +79,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneTimeInteraction: 1
+  destroyOnInteraction: 0
   interationButton: Interact
   interactionColor: {r: 1, g: 0, b: 0.13258171, a: 1}
   interactionTime: 1.5
   interactionLabel: Destroy
---- !u!54 &1399333561418388391
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 890356193133368865}
-  serializedVersion: 2
-  m_Mass: 0.1
-  m_Drag: 0.3
-  m_AngularDrag: 0.4
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  interactionSound: {fileID: 0}
+  interactionCompleteSound: {fileID: 0}
 --- !u!114 &3565764640812754072
 MonoBehaviour:
   m_ObjectHideFlags: 0
