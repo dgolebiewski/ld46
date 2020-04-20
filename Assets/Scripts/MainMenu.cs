@@ -17,6 +17,11 @@ public class MainMenu : MonoBehaviour
     private bool introductionInProgress = false;
     private int currentIntroSegment = 0;
 
+    void Start()
+    {
+        Time.timeScale = 1;
+    }
+
     void Update()
     {
         if(introductionInProgress && Input.GetButtonDown("Interact"))
