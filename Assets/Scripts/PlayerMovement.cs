@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        sprint = Input.GetButton("Sprint") && stamina > 0 && sprintCooldownLeft <= 0;
+        sprint = Input.GetButton("Sprint") && stamina > 0 && sprintCooldownLeft <= 0 && (Input.GetAxis("Vertical") > 0 || Input.GetAxis("Horizontal") > 0);
 
         if(!lockMovement)
         {

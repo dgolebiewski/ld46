@@ -99,6 +99,12 @@ public class Player : MonoBehaviour
         StartCoroutine(CheckInteractions());
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.tag == "MapBorder")
+            InfoPanel.instance.DisplayInfo(":(");
+    }
+
     public Interactable GetCurrentInteractable()
     {
         return currentInteraction;

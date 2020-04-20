@@ -7,6 +7,8 @@ public class Interactable : MonoBehaviour
     [SerializeField]
     private bool oneTimeInteraction = false;
     [SerializeField]
+    private bool destroyOnInteraction = false;
+    [SerializeField]
     private string interationButton = "Interact";
     [SerializeField]
     private Color interactionColor = Color.cyan;
@@ -14,6 +16,10 @@ public class Interactable : MonoBehaviour
     private float interactionTime = 2f;
     [SerializeField]
     private string interactionLabel;
+    [SerializeField]
+    private AudioSource interactionSound;
+    [SerializeField]
+    private AudioSource interactionCompleteSound;
 
     private float currentInteractionTime;
 
@@ -49,6 +55,15 @@ public class Interactable : MonoBehaviour
 
                 if(onInteractionCompletePersistent != null)
                     onInteractionCompletePersistent();
+
+                if(interactionSound != null)
+                    interactionSound.Stop();
+
+                if(interactionCompleteSound != null)
+                    interactionCompleteSound.Play();
+
+                if(destroyOnInteraction)
+                    Destroy(this.gameObject);
             }
         }
     }
@@ -61,12 +76,18 @@ public class Interactable : MonoBehaviour
         currentInteractionTime = interactionTime;
 
         onInteractionComplete += completionCallback;
+
+        if(interactionSound != null)
+            interactionSound.Play();
     }
 
     public virtual void CancelInteraction()
     {
         currentInteractionTime = 0f;
         onInteractionComplete = null;
+
+        if(interactionSound != null)
+            interactionSound.Stop();
     }
 
     public string GetInteractionLabel()

@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
 
 public class GameMaster : MonoBehaviour
 {
@@ -32,6 +34,8 @@ public class GameMaster : MonoBehaviour
     [SerializeField]
     private float rainTime = 210;
     [SerializeField]
+    private AudioSourceController rainSound;
+    [SerializeField]
     private LayerMask campfireCoverMask;
     [SerializeField]
     private float raycastChecksRate = 2f;
@@ -39,6 +43,10 @@ public class GameMaster : MonoBehaviour
     private float windStartMinTime = 60;
     [SerializeField]
     private float windStartMaxTime = 100;
+    [SerializeField]
+    private float windDirectionChangeMinTime = 30f;
+    [SerializeField]
+    private float windDirectionChangeMaxTime = 60f;
     [SerializeField]
     private float windCampfireTimeMultiplier = 5f;
     [SerializeField]
@@ -49,6 +57,14 @@ public class GameMaster : MonoBehaviour
     private GameObject windDirectionUI;
     [SerializeField]
     private WindDirectionArrow windDirectionArrow;
+    [SerializeField]
+    private AudioSourceController windSound;
+    [SerializeField]
+    private TMP_Text scoreText;
+    [SerializeField]
+    private TMP_Text highestScoreBadge;
+    [SerializeField]
+    private Animator gameOverPanel;
 
     private float campfireTime;
     private float campfireFadeMultiplier = 1f;
@@ -58,6 +74,10 @@ public class GameMaster : MonoBehaviour
 
     private bool isWindy = false;
     private bool coveredFromWind = false;
+
+    private float score = 0;
+
+    private bool gameOver = false;
 
     private bool paused = false;
 
@@ -80,6 +100,8 @@ public class GameMaster : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -96,11 +118,36 @@ public class GameMaster : MonoBehaviour
         float campfireTimeDelta = Time.deltaTime * campfireFadeMultiplier;
 
         if(isRaining && !isCovered)
-        {
             campfireTimeDelta *= campfireMultiplierWhileRaining;
-        }
+
+        if(isWindy && !coveredFromWind)
+            campfireTimeDelta *= windCampfireTimeMultiplier;
 
         campfireTime -= campfireTimeDelta;
+
+        if(campfireTime <= 0)
+        {
+            Time.timeScale = 0;
+            scoreText.text = "Score: " + Mathf.CeilToInt(score);
+            gameOverPanel.SetTrigger("game_over");
+
+            gameOver = true;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            
+            int highestScore = PlayerPrefs.GetInt("HighestScore", 0);
+            if(score > highestScore)
+            {
+                PlayerPrefs.SetInt("HighestScore", Mathf.CeilToInt(score));
+                highestScoreBadge.enabled = true;
+            }
+        }
+
+        if(gameOver)
+            return;
+
+        score += Time.deltaTime;
 
         if(Input.GetButtonDown("Cancel"))
             TogglePause();
@@ -170,6 +217,18 @@ public class GameMaster : MonoBehaviour
             onResourcesUpdate();
     }
 
+    public void RestartGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(1);
+    }
+
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+    }
+
     public void Quit()
     {
         Application.Quit();
@@ -221,6 +280,8 @@ public class GameMaster : MonoBehaviour
         rainEffect.SetActive(true);
         isRaining = true;
 
+        rainSound.FadeIn();
+
         StartCoroutine(RainCoverCheck());
         StartCoroutine(StopRain());
     }
@@ -231,6 +292,8 @@ public class GameMaster : MonoBehaviour
 
         rainEffect.SetActive(false);
         isRaining = false;
+
+        rainSound.FadeOut();
 
         StartCoroutine(StartRain());
     }
@@ -257,6 +320,8 @@ public class GameMaster : MonoBehaviour
         {
             infoPanel.DisplayInfo("Wind is picking up.");
             windDirectionUI.SetActive(true);
+
+            windSound.FadeIn();
         }
         else
             infoPanel.DisplayInfo("Wind is changing direction.");
